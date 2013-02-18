@@ -80,11 +80,15 @@
 
     $P.initialize({
       image_data: "",
-      url: 'http//pxlshp.com',
+      phonegap: true,
       icon_id: 0
     })
 
   })() </script>
+
+  <form id="postform" action="http://pxlshp.com/create" method="post">
+    <input id="postform_image_data" type="hidden" name="image_data" />
+  </form>
 
   <script type="text/javascript">
 
@@ -101,7 +105,6 @@
   </script>
 
 </div>
-
 
 </div>
 

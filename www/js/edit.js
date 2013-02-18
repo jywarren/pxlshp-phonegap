@@ -10,11 +10,10 @@ $P = {
 	 * Startup environment, accepts data_url or just URL of starting image
 	**/
 	initialize: function(args) {
-		$P.element = $('#canvas')
 		$P.element = $('#canvas')[0]
 		$P.canvas = $P.element.getContext('2d');
 		$C = $P.canvas
-		if ($(window).width() < $(window).height()) $P.width = args['displaySize'] || $(window).width()-30 //256
+		if ($(window).width() < $(window).height()) $P.width = args['displaySize'] || $(window).width()-64 //256
 		else $P.width = args['displaySize'] || ($(window).width()-30)/3
 		$P.height = $P.width
 		$P.element.width = $P.width
@@ -34,12 +33,11 @@ $P = {
 		$C.fillRect(0,0,$P.width,$P.height)
 		if (args['image_data'] != "") $P.displayIcon(args['image_data'])
 		if (args['icon_id'] != "" || args['icon_id'] == 0) $P.icon_id = args['icon_id']
-		console.log(args['icon_id'])
 		if (args['type'] != "") $P.type = args['type']
 		if (args['hash'] != "") {
 			$P.hash = args['hash']
 			$P.decodeIconString($P.hash)
-			$P.generatePermalink()
+			//$P.generatePermalink()
 		}
 		if ($P.grid) $P.drawGrid() 
 	},
@@ -58,7 +56,7 @@ $P = {
 		e.preventDefault()
 		$P.dragging = false
 		if ($P.grid) $P.drawGrid() 
-		$P.generatePermalink()
+		//$P.generatePermalink()
 	},
 	on_mousemove: function(e) {
 		if ($P.dragging) {
@@ -157,7 +155,7 @@ $P = {
 	displayIcon: function(src) {
 		$P.displayImage = new Image()
 		$P.displayImage.onload = function() {
-			$('body').append("<canvas style='' id='displayCanvas'></canvas>")
+			$('body').append("<canvas style='display:none;' id='displayCanvas'></canvas>")
 			var element = $('#displayCanvas')[0]
 			element.width = $P.iconSize
 			element.height = $P.iconSize
@@ -171,19 +169,19 @@ $P = {
 				$C.fillStyle = "rgba("+img[j]+","+img[j+1]+","+img[j+2]+","+img[j+3]+")"
 				$C.fillRect(x*$P.pixelSize,y*$P.pixelSize,$P.pixelSize,$P.pixelSize)
 			}
-			$P.generatePermalink()
+			//$P.generatePermalink()
 			if ($P.grid) $P.drawGrid() 
 		}
 		$P.displayImage.src = src
 	},
 
 	/**
-	 * Generates a b64 permalink and displays it
+	 * Generates a b64 permalink and displays it; ended up impractical
 	**/
 	generatePermalink: function() {
-//		s = $P.encodeIconString()
-//		$('#permalink').html("/bw8/"+s)
-//		$('#permalink')[0].href = "/bw8/"+s
+		s = $P.encodeIconString()
+		$('#permalink').html("/bw8/"+s)
+		$('#permalink')[0].href = "/bw8/"+s
 	},
 
 	/**
@@ -201,8 +199,6 @@ $P = {
 					else binary += "1"
 				}
 			}
-			//console.log(binary)
-			//console.log(parseInt(binary,2))
 			return Base64.encode(parseInt(binary,2))
 		}
 	},
@@ -223,14 +219,12 @@ $P = {
 		}
 	},
 
-	saveClose: "(<a href='javascript:void()' onClick='$(\"#notice\").hide()'>close</a>)",
 	/**
 	 * Duh
 	**/
-	save: function() {
+	save: function(anew) {
 		if ($P.icon_id == 0) url = "/create"
-		else url = "/save/"+$P.icon_id
-		$('#notice').html("<p>Sending... "+$P.saveClose+"</p>")
+		else url = "http://pxlshp.com/save/"+$P.icon_id
 		$P.getScaledIcon(function() {
 			$.ajax({
 				url:url,
@@ -238,15 +232,15 @@ $P = {
 				data: { image_data: $P.scaled_icon },
 				success: function(data) {
 					if (data == "Saved!") {
-						$('#notice').html("<p>"+data+" "+$P.saveClose+"</p>")
-						setTimeout(function(){ $('#notice').html("") },1500)
+						$P.alert(data,"success",true)
+						setTimeout(function(){ $('#alerts').html("") },1500)
+						if (anew) window.location = "/new"
 					} else {
-						window.location = "/icon/"+data
+						window.location = "http://pxlshp.com/icon/"+data
 					}
 				}, 
 				failure: function(data) {
-					$('#error').html("<p>There was an error"+$P.saveClose+"</p>")
-					setTimeout(function(){ $('#error').html("") },1500)
+					$P.alert("There was an error.","error",true)
 				} 
 			})
 		})
@@ -270,13 +264,24 @@ $P = {
 		$P.scaled_icon = excerptCanvasContext.canvas.toDataURL()
 		callback()
 	},
+
+	/**
+	 * Displays a Bootstrap-style alert of type "type" ("success", "error", "info")
+	 * and fades after 1.5 seconds if "fade" is true
+	 */
+	alert: function(msg,type,fade) {
+		if (type) type = " alert-"+type
+		$('#alerts').append("<div class='alert"+type+"'>"+msg+' <button type="button" class="close" data-dismiss="alert">×</button></div>')
+		if (fade) setTimeout(function(){ $('#alerts').html("") },1500)
+},
+
 	/**
 	 * Returns a dataURL string of any rect from the offered canvas
 	 */
 	excerptCanvas: function(x1,y1,x2,y2,source) {
 		source = source || $C
 		var width = x2-x1, height = y2-y1
-		$('body').append("<canvas style='' id='excerptCanvas'></canvas>")
+		$('body').append("<canvas style='display:none;' id='excerptCanvas'></canvas>")
 		var element = $('#excerptCanvas')[0]
 		element.width = width
 		element.height = height

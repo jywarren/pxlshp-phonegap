@@ -5,6 +5,7 @@ $P = {
 	pointer_x: 0,
 	pointer_y: 0,
 	v_offset: 60, // height of the canvas below top of page, used only for touch events
+	url: "",
 
 	/**
 	 * Startup environment, accepts data_url or just URL of starting image
@@ -22,6 +23,7 @@ $P = {
 		$P.pixelSize = $P.width/$P.iconSize
 		$P.intPixelSize = Math.floor($P.width/$P.iconSize)
 		$P.phonegap = args['phonegap'] || false
+		if ($P.phonegap) $P.url = "http://pxlshp.com"
 		$P.grid = args['grid'] || true
 		$P.pointerActive = false
 		$('body').mouseup($P.on_mouseup)
@@ -232,8 +234,8 @@ $P = {
 	 * Duh
 	**/
 	save: function(anew) {
-		if ($P.icon_id == 0) url = "/create"
-		else url = "/save/"+$P.icon_id
+		if ($P.icon_id == 0) url = $P.url+"/create"
+		else url = $P.url+"/save/"+$P.icon_id
 		$P.getScaledIcon(function() {
 			if ($P.phonegap) {
 				$.ajax({
@@ -245,9 +247,9 @@ $P = {
 						$('#save-anew').button('reset');
 						if (data == "Saved!") {
 							setTimeout(function(){ $('#alerts').html("") },1500)
-							if (anew) window.location = "/new"
+							if (anew) window.location = $P.url+"/new"
 						} else {
-							window.location = "/icon/"+data
+							window.location = $P.url+"/icon/"+data
 						}
 					}, 
 					failure: function(data) {

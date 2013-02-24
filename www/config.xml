@@ -36,6 +36,7 @@
     <gap:splash src="img/splash-1024x768.png"  gap:platform="android" />
     <gap:splash src="img/splash-1024x768.png"  gap:platform="android" gap:density="ldpi" />
     <gap:splash src="img/splash-320x480.png"  gap:platform="android" gap:density="mdpi" />
+    <gap:splash src="img/splash-720x1280.png"  gap:platform="android" gap:density="xhdpi" />
     <gap:splash src="img/splash-320x480.png"    gap:platform="ios"     width="320" height="480" />
     <gap:splash src="img/splash-640x960.png" gap:platform="ios"     width="640" height="960" />
     <gap:splash src="img/splash-768x1024.png"      gap:platform="ios"     width="768" height="1024" />

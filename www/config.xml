@@ -20,9 +20,11 @@
     <preference name="target-device"    value="universal" />
     <preference name="fullscreen"       value="false" />
     <preference name="webviewbounce"    value="false" />
-    <preference name="prerendered-icon"    value="false" />
+    <preference name="prerendered-icon"    value="true" />
     <preference name="ios-statusbarstyle" value="black-opaque" />
     <preference name="stay-in-webview" value="true" />
+
+    <access origin="http://pxlshp.com" />
 
     <icon src="img/mnls-256.png" />
     <icon src="img/mnls-36.png"   gap:platform="android"    gap:density="ldpi" />

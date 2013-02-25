@@ -25,6 +25,10 @@
     <preference name="stay-in-webview" value="true" />
 
     <access origin="http://pxlshp.com" />
+    <access origin="http://connect.facebook.net" />
+    <access origin="https://connect.facebook.net" />
+    <access origin="http://www.google-analytics.com" />
+    <access origin="https://ssl.google-analytics.com" />
 
     <icon src="img/mnls-256.png" />
     <icon src="img/mnls-36.png"   gap:platform="android"    gap:density="ldpi" />

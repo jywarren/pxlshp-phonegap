@@ -22,6 +22,7 @@
     <preference name="webviewbounce"    value="false" />
     <preference name="prerendered-icon"    value="false" />
     <preference name="ios-statusbarstyle" value="black-opaque" />
+    <preference name="stay-in-webview" value="true" />
 
     <icon src="img/mnls-256.png" />
     <icon src="img/mnls-36.png"   gap:platform="android"    gap:density="ldpi" />
